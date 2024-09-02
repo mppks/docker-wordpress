@@ -16,6 +16,7 @@ services:
         depends_on:
             - db
         image: wordpress:latest
+        user: "1000:1000"
         volumes:
             - ./data/html:/var/www/html
         ports:
