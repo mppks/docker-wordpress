@@ -24,9 +24,9 @@ services:
         restart: always
         environment:
             WORDPRESS_DB_HOST: db:3306
-            WORDPRESS_DB_USER: my_db_user
-            WORDPRESS_DB_PASSWORD: my_db_pass
-            WORDPRESS_DB_NAME: my_db_name
+            WORDPRESS_DB_USER: ${MYSQL_USER}
+            WORDPRESS_DB_PASSWORD: ${MYSQL_PASSWORD}
+            WORDPRESS_DB_NAME: ${MYSQL_DATABASE}
 
     db:
         image: mysql:latest
@@ -34,10 +34,10 @@ services:
             - ./data/mysql:/var/lib/mysql
         restart: always
         environment:
-            MYSQL_ROOT_PASSWORD: my_root_pass
-            MYSQL_DATABASE: my_db_name
-            MYSQL_USER: my_db_user
-            MYSQL_PASSWORD: my_db_pass
+            MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+            MYSQL_USER: ${MYSQL_USER}
+            MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+            MYSQL_DATABASE: ${MYSQL_DATABASE}
 
     phpmyadmin:
         image: phpmyadmin/phpmyadmin:latest
@@ -47,4 +47,4 @@ services:
         ports:
             - "8081:80"
         environment:
-            MYSQL_ROOT_PASSWORD: my_root_pass
+            MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
