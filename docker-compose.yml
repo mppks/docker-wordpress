@@ -1,4 +1,4 @@
-version: '3.3'
+version: '3.9'
 
 services:
     nginx:
@@ -13,9 +13,11 @@ services:
             - wordpress
 
     wordpress:
+        build:
+            context: ./wordpress
+            dockerfile: dev.dockerfile
         depends_on:
             - db
-        image: wordpress:latest
         user: "1000:1000"
         volumes:
             - ./data/html:/var/www/html
