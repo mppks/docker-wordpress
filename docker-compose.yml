@@ -1,5 +1,3 @@
-version: '3.9'
-
 services:
     nginx:
         image: nginx:latest
@@ -8,9 +6,11 @@ services:
             - ./data/html:/var/www/html
             - ./logs/nginx:/var/log/nginx
         ports:
-            - "8080:80"
-        links:
+            - 8080:80
+        depends_on:
             - wordpress
+        networks:
+            - frontend
 
     wordpress:
         build:
@@ -18,12 +18,14 @@ services:
             dockerfile: dev.dockerfile
         depends_on:
             - db
-        user: "1000:1000"
         volumes:
             - ./data/html:/var/www/html
         ports:
-            - "80:80"
+            - 80:80
         restart: always
+        networks:
+            - frontend
+            - backend
         environment:
             WORDPRESS_DB_HOST: db:3306
             WORDPRESS_DB_USER: ${MYSQL_USER}
@@ -35,6 +37,8 @@ services:
         volumes:
             - ./data/mysql:/var/lib/mysql
         restart: always
+        networks:
+            - backend
         environment:
             MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
             MYSQL_USER: ${MYSQL_USER}
@@ -44,9 +48,15 @@ services:
     phpmyadmin:
         image: phpmyadmin/phpmyadmin:latest
         restart: always
-        links:
-            - db:mysql
+        networks:
+            - backend
         ports:
-            - "8081:80"
+            - 8081:80
         environment:
             MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+
+networks:
+    frontend:
+        driver: bridge    
+    backend:
+        driver: bridge

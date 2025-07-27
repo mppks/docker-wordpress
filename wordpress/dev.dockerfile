@@ -1,4 +1,4 @@
-FROM wordpress:latest
+FROM wordpress:php8.2-fpm
 
 RUN yes | pecl install xdebug-3.3.2 \
     && echo "zend_extension=xdebug" > /usr/local/etc/php/conf.d/xdebug.ini \
